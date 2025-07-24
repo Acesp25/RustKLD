@@ -1,8 +1,9 @@
 use kernel::*;
 use libc::{c_int, ENXIO};
+use alloc::boxed::Box;
 use crate::char_device::CharacterDevice;
 
-static mut ECHO_DEVICE: Option<CharacterDevice> = None;
+static mut ECHO_DEVICE: Option<Box<CharacterDevice>> = None;
 
 pub struct Events;
 
@@ -23,7 +24,7 @@ impl Events {
     pub fn unload() -> c_int {
         unsafe {
             // deref raw ptr to get pointed Option<CharacterDevice>
-            let ptr: *mut Option<CharacterDevice> = &raw mut ECHO_DEVICE;
+            let ptr: *mut Option<Box<CharacterDevice>> = &raw mut ECHO_DEVICE;
 
             // call Option::take() to move Some(dev) out, leaving nothing behind
             let dev_out = (*ptr).take();
