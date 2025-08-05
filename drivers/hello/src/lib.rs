@@ -17,7 +17,7 @@ fn panic(_info: &PanicInfo) -> ! {
     loop {}
 }
 
-#[unsafe(no_mangle)]
+#[no_mangle]
 pub unsafe extern "C" fn module_event(
     _mod: *mut module,
     event: i32,
@@ -38,7 +38,7 @@ pub unsafe extern "C" fn module_event(
     error
 }
 
-#[unsafe(no_mangle)]
+#[no_mangle]
 pub static mut hello_mod: moduledata_t = moduledata_t {
     name: cstr_ptr!("hello"),
     evhand: Some(module_event),

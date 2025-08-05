@@ -4,4 +4,4 @@ members = [
   "drivers/hello",
   "drivers/char",
 ]
-resolver = "3"
+resolver = "2"

@@ -1,6 +1,6 @@
 extern crate bindgen;
 
-use bindgen::{Builder, MacroTypeVariation::Signed};
+use bindgen::{Builder, RustEdition, MacroTypeVariation::Signed};
 use std::path::PathBuf;
 
 const FILEPATH: &str = "src/bindings/imports.rs";
@@ -21,6 +21,9 @@ fn main() {
         .clang_arg("-DKLD_MODULE")
         .clang_arg("-I.")
         .clang_arg(src_base)
+        .rust_edition(RustEdition::Edition2021)
+        .rust_target(bindgen::RustTarget::stable(77, 0)
+                     .unwrap_or_else(|_| panic!("Invalid Rust Target")))
         .generate()
         .expect("Unable to generate bindings");
 
