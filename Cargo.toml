@@ -3,5 +3,6 @@ members = [
   "kernel",
   "drivers/hello",
   "drivers/char",
+  "drivers/network",
 ]
 resolver = "3"

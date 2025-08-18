@@ -1,0 +1,45 @@
+# Makefile.toml
+[env]
+MODULE_NAME = "e1000"
+OBJECT_DIR = "../../kernel/target/objects"
+TARGET = "x86_64-kernel-freebsd"
+
+[tasks.make-obj-dir]
+description = "Creating the objects folder"
+command = "mkdir"
+args = ["-p", "${OBJECT_DIR}"]
+
+[tasks.build-rust]
+description = "Compile the Rust staticlib for the kernel"
+command = "cargo"
+args = [
+  "build",
+  "--target", "../../kernel/${TARGET}.json",
+  "--release"
+]
+
+[tasks.extract-objs]
+description = "Extract .o files from the Rust .a"
+command = "ar"
+args = [
+  "-xv", "../${TARGET}/release/lib${MODULE_NAME}.a",
+]
+cwd = "${OBJECT_DIR}"
+
+[tasks.link-kmod]
+description = "Invoke the FreeBSD kmod makefile to produce hello.ko"
+command = "make"
+args = [
+  "-C", ".",
+  "OBJECTDIR=${OBJECT_DIR}",
+  "${MODULE_NAME}.ko"
+]
+
+[tasks.build-kmod]
+description = "Full pipeline: build rust -> extract -> link .ko"
+dependencies = [
+  "make-obj-dir",
+  "build-rust",
+  "extract-objs",
+  "link-kmod",
+]
